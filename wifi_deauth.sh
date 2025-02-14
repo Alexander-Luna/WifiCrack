@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Configuración
 DEFAULT_INTERFACE="wlan1"
 CAPTURE_DIR="caps"
