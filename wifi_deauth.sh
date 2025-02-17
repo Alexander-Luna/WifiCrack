@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Configuración
 DEFAULT_INTERFACE="wlan1"
 CAPTURE_DIR="caps"
@@ -5,7 +7,7 @@ CAPTURE_FILE="$CAPTURE_DIR/captura"
 CURRENT_BSSID=""
 CURRENT_CHANNEL=""
 DICT_PATH="rockyou.txt"
-DICTIONARY_DIR="./diccionarios"  # Carpeta donde están los diccionarios
+DICTIONARY_DIR="./diccionarios"  
 
 mkdir -p $CAPTURE_DIR
 
@@ -20,18 +22,19 @@ show_current_bssid() {
 
 # Función para limpiar la carpeta caps
 clean_capture_folder() {
-    rm -rf $CAPTURE_DIR/*
-    echo -e "\033[1;33m[+] Se han eliminado todos los archivos en $CAPTURE_DIR.\033[0m" # Amarillo
+    GITKEEP_FILE="$CAPTURE_DIR/.gitkeep"
+    find $CAPTURE_DIR -type f ! -name ".gitkeep" -exec rm -f {} \;
+    echo -e "\033[1;33m[+] Se han eliminado todos los archivos en $CAPTURE_DIR, excepto .gitkeep.\033[0m"  # Amarillo
     sleep 2
 }
 
 # Función para poner la interfaz en modo monitor
 enable_monitor_mode() {
     echo -e '\033[1;34m[+] Listando interfaces de red disponibles...\033[0m' # Azul
-    interfaces=($(ip link show | awk -F': ' '/^[0-9]+: / {print $2}'))  # Obtener lista de interfaces
+    interfaces=($(ip link show | awk -F': ' '/^[0-9]+: / {print $2}')) 
     
     for i in "${!interfaces[@]}"; do
-        echo -e "\033[1;33m[$i]\033[0m ${interfaces[$i]}"  # Amarillo para los números
+        echo -e "\033[1;33m[$i]\033[0m ${interfaces[$i]}"  
     done
 
     read -p "Ingrese el número de la interfaz que desea configurar en modo monitor: " selection
@@ -40,10 +43,8 @@ enable_monitor_mode() {
         echo -e "\033[1;31m[-] Selección inválida.\033[0m"  # Rojo
         return
     fi
-
     DEFAULT_INTERFACE="${interfaces[$selection]}"
-    
-    # Verificar si ya está en modo monitor
+
     mode=$(iw dev "$DEFAULT_INTERFACE" info | awk '/type/ {print $2}')
     
     if [[ "$mode" == "monitor" ]]; then
@@ -73,7 +74,7 @@ enable_monitor_mode() {
 # Función para quitar el modo monitor y restaurar el modo gestionado
 disable_monitor_mode() {
     echo -e '\033[1;34m[+] Listando interfaces de red en modo monitor...\033[0m' # Azul
-    interfaces=($(iw dev | awk '/Interface/ {iface=$2} /type monitor/ {print iface}'))  # Obtener interfaces en modo monitor
+    interfaces=($(iw dev | awk '/Interface/ {iface=$2} /type monitor/ {print iface}'))  
 
     if [[ ${#interfaces[@]} -eq 0 ]]; then
         echo -e "\033[1;33m[!] No hay interfaces en modo monitor.\033[0m" # Amarillo
@@ -136,9 +137,7 @@ scan_networks() {
 
 # Función para capturar tráfico de una red específica
 capture_traffic() {
-    # Limpiar archivos antes de capturar
     clean_capture_folder
-    
     read -p "Ingrese el BSSID del AP objetivo: " CURRENT_BSSID
     read -p "Ingrese el canal (CH) del AP objetivo: " CURRENT_CHANNEL
     
@@ -188,7 +187,6 @@ crack_with_cpu() {
         fi
     done
     
-    # Inicia el crackeo con el diccionario seleccionado
     gnome-terminal -- bash -c "
         echo -e '\033[1;33m[+] Iniciando crackeo con el diccionario...\033[0m'; # Amarillo
         sudo aircrack-ng $CAPTURE_FILE-01.cap -w $DICT_PATH;
@@ -283,17 +281,28 @@ crack_with_wifiphisher() {
 
 # Función para mostrar interfaces de red y su estado de modo
 show_interfaces() {
-   gnome-terminal -- bash -c " echo -e '\033[1;34m[+] Mostrando interfaces de red y su estado...\033[0m'  # Azul
-    interfaces=$(ls /sys/class/net)
-    for interface in $interfaces; do
-        if iw dev $interface info | grep -q "type monitor"; then
-            echo -e "\033[1;32m[+] $interface está en modo monitor.\033[0m"  # Verde
-        else
-            echo -e "\033[1;31m[-] $interface NO está en modo monitor.\033[0m"  # Rojo
-        fi
-    done
-     bash";
+    gnome-terminal -- bash -c "
+        echo -e '\033[1;34m[+] Mostrando interfaces de red y su estado...\033[0m'  # Azul
+        interfaces=\$(ls /sys/class/net)
+        
+        for interface in \$interfaces; do
+            if iw dev \$interface info &>/dev/null; then
+                mode=\$(iw dev \$interface info | grep 'type' | awk '{print \$2}')
+                if [[ \$mode == 'monitor' ]]; then
+                    echo -e '\033[1;32m[+] \$interface está en modo monitor.\033[0m'  # Verde
+                else
+                    echo -e '\033[1;31m[-] \$interface NO está en modo monitor.\033[0m'  # Rojo
+                fi
+            else
+                echo -e '\033[1;31m[-] \$interface NO está disponible o no se puede obtener su estado.\033[0m'  # Rojo
+            fi
+        done
+        echo -e '\033[1;33m[+] Presione Enter para cerrar esta ventana...\033[0m'  # Amarillo
+        read
+    "
 }
+
+
 
 
  exit_system(){
