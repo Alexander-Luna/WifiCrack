@@ -33,13 +33,13 @@ sudo python3 setup.py install
 
 ## ⚖️ Consideraciones Legales
 Este software debe usarse únicamente para:
-✔️ Pruebas de seguridad autorizadas  
-✔️ Investigación académica  
-✔️ Desarrollo de sistemas de validación 
-✔️ Pruebas de penetración en redes WiFi
-❌ Estas herramientas deben utilizarse exclusivamente para auditorías de seguridad en redes donde tengas permiso explícito. **El uso indebido puede ser ilegal y conllevar sanciones.**
-❌ **No para ataques maliciosos**
-❌ **El mal uso de esta herramienta es responsabilidad exclusiva del usuario.**
+✔️ Pruebas de seguridad autorizadas.  
+✔️ Investigación académica.  
+✔️ Desarrollo de sistemas de validación. 
+✔️ Pruebas de penetración en redes WiFi.  
+❌ Estas herramientas deben utilizarse exclusivamente para auditorías de seguridad en redes donde tengas permiso explícito. **El uso indebido puede ser ilegal y conllevar sanciones.**  
+❌ Uso con fines educativos **No para ataques maliciosos**  
+❌ **El mal uso de esta herramienta es responsabilidad exclusiva del usuario.**  
 
 
 ## Contribuciones
