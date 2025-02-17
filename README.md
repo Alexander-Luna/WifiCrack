@@ -1,76 +1,50 @@
-Dark Wolf Apps - WiFi Cracking Tool
-===================================
+# Herramientas de Auditoría de Seguridad WiFi
 
-¡Bienvenido/a a Dark Wolf Apps - WiFi Cracking Tool!
+Este repositorio contiene información sobre herramientas de auditoría de seguridad WiFi utilizadas para pruebas de penetración en redes inalámbricas. **Úsalo solo en entornos legales y con autorización explícita.**
 
-Este proyecto contiene un script orientado a auditorías de redes WiFi y pruebas de penetración, facilitando:
-- Activar/Desactivar modo monitor
-- Escanear redes con airodump-ng
-- Capturar tráfico para buscar handshakes
-- Realizar ataques de desautenticación (aireplay-ng)
-- Crackeo de contraseñas con CPU (aircrack-ng) o GPU (hashcat)
-- Ataques WPS (reaver)
-- Ataques de phishing con WiFiPhisher
+## Herramientas Incluidas
 
-─────────────────────────────────────────────────────────────────────────────
-REQUISITOS Y DEPENDENCIAS
-─────────────────────────────────────────────────────────────────────────────
+### 1. Aircrack-ng
+- Conjunto de herramientas para auditoría de redes WiFi.
+- Permite capturar paquetes y descifrar claves WEP y WPA/WPA2.
+- Sitio oficial: [https://www.aircrack-ng.org](https://www.aircrack-ng.org)
 
-- Sistema operativo basado en Linux. 
-  (En Windows, puedes usar WSL o una máquina virtual con Linux.)
-- aircrack-ng (incluye airodump-ng, aireplay-ng, etc.)
-- iw, iproute2 (manejo de redes e interfaces)
-- hashcat (para crackeo por GPU)
-- reaver (ataques WPS)
-- wifiphisher (ataques de phishing)
-- hcxtools (especialmente hcxpcapngtool)
+### 2. Hashcat
+- Herramienta avanzada de descifrado de contraseñas utilizando la potencia de la GPU.
+- Compatible con múltiples algoritmos de hash, incluyendo WPA/WPA2.
+- Sitio oficial: [https://hashcat.net/hashcat/](https://hashcat.net/hashcat/)
 
-Para distribuciones Debian/Ubuntu (Linux), podrías instalar:
-------------------------------------------------------------
-sudo apt-get update && sudo apt-get install aircrack-ng iw iproute2 gnome-terminal hashcat reaver wifiphisher hcxtools
-------------------------------------------------------------
+### 3. WiFiPhisher
+- Herramienta para ataques de ingeniería social en redes WiFi.
+- Crea puntos de acceso falsos para capturar credenciales.
+- Sitio oficial: [https://github.com/wifiphisher/wifiphisher](https://github.com/wifiphisher/wifiphisher)
 
-─────────────────────────────────────────────────────────────────────────────
-CÓMO USAR ESTE SCRIPT
-─────────────────────────────────────────────────────────────────────────────
+## Instalación
+Cada herramienta tiene requisitos específicos. Para instalar en Kali Linux:
+```bash
+sudo apt update && sudo apt install aircrack-ng hashcat
+```
+Para WiFiPhisher:
+```bash
+git clone https://github.com/wifiphisher/wifiphisher.git
+cd wifiphisher
+sudo python3 setup.py install
+```
 
-1. Descarga y descomprime el repositorio.
-2. Da permisos de ejecución al script principal:
-   chmod +x wifi_cracking_tool.sh
-3. Ejecuta con privilegios de superusuario:
-   sudo ./wifi_cracking_tool.sh
-4. Selecciona la opción deseada en el menú:
-   1. Mostrar Interfaces
-   2. Activar Interfaz en modo monitor
-   3. Desactivar Interfaz en modo monitor
-   4. Escanear redes WiFi
-   5. Capturar tráfico
-   6. Enviar paquetes de desautenticación
-   7. Crackear con WifiPhisher
-   8. Crackear con CPU (aircrack-ng)
-   9. Crackear con GPU (hashcat)
-   10. Crackear con WPS (reaver)
-   11. Limpiar la carpeta de capturas
-   12. Salir
+## ⚖️ Consideraciones Legales
+Este software debe usarse únicamente para:
+✔️ Pruebas de seguridad autorizadas  
+✔️ Investigación académica  
+✔️ Desarrollo de sistemas de validación 
+✔️ Pruebas de penetración en redes WiFi
+❌ Estas herramientas deben utilizarse exclusivamente para auditorías de seguridad en redes donde tengas permiso explícito. **El uso indebido puede ser ilegal y conllevar sanciones.**
+❌ **No para ataques maliciosos**
+❌ **El mal uso de esta herramienta es responsabilidad exclusiva del usuario.**
 
-Flujo básico de auditoría WiFi:
--------------------------------
-- Muestra o selecciona la interfaz y actívala en modo monitor.
-- Escanea redes para identificar la que deseas auditar.
-- Inicia la captura de tráfico en la red elegida.
-- (Opcional) Lanza paquetes de desautenticación para forzar la generación de handshakes.
-- Crackea la contraseña, ya sea usando CPU, GPU o mediante exploits WPS o ingeniería social.
-- Por último, limpia la carpeta de capturas y desactiva la interfaz en modo monitor si lo deseas.
 
-─────────────────────────────────────────────────────────────────────────────
-CONSIDERACIONES
-─────────────────────────────────────────────────────────────────────────────
+## Contribuciones
+Si deseas mejorar este repositorio, abre un issue o haz un pull request.
 
-- Ejecútalo únicamente en redes bajo tu control o con autorización explícita.  
-- Verifica la compatibilidad de tu hardware (tarjetas inalámbricas que soporten modo monitor).  
-- En Windows, puedes instalar las herramientas en el Subsistema de Windows para Linux (WSL) o usar una máquina virtual.  
-- Esta herramienta está pensada para aprendizaje y pruebas de penetración con permiso.
+## 📜 Licencia
+Este proyecto está licenciado bajo la **Licencia MIT**, lo que significa que puedes usarlo y modificarlo libremente siempre que se otorgue el crédito correspondiente al autor.
 
-─────────────────────────────────────────────────────────────────────────────
-¡Disfruta aprendiendo y explorando con responsabilidad!
-─────────────────────────────────────────────────────────────────────────────
